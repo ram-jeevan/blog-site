@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+// Astro 7: pre-render one page per post
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+---
+
+<Layout title={`${post.data.title} — Written Works`} description={post.data.description}>
+  <article class="post">
+    <header class="post-head wrap">
+      <a href="/blog" class="back kicker">← Written Works</a>
+      <span class="post-cat kicker">{post.data.category}</span>
+      <h1 class="serif post-title">{post.data.title}</h1>
+      <p class="post-meta folio"><b>Ram Jeevan</b> · {fmt(post.data.date)} · {post.data.readingTime}</p>
+      <div class="rule-motif" aria-hidden="true"><span class="dot"></span></div>
+    </header>
+
+    {post.data.cover && (
+      <figure class="post-cover wrap">
+        <img src={post.data.cover} alt={post.data.title} />
+      </figure>
+    )}
+
+    <div class="post-body wrap">
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    <nav class="post-foot wrap">
+      <a href="/blog" class="btn">Browse all essays <span>→</span></a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .post{padding:48px 0 96px}
+  .post-head{max-width:760px;text-align:center;padding-top:8px;padding-bottom:0}
+  .back{display:inline-block;margin-bottom:26px;color:var(--ink-mute)}
+  .back:hover{color:var(--red)}
+  .post-cat{display:block;color:var(--red);margin-bottom:14px}
+  .post-title{font-weight:800;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.04;color:var(--ink);max-width:18ch;margin:0 auto}
+  .post-meta{margin:22px 0 26px}
+  .post-meta b{color:var(--ink)}
+  .post-head .rule-motif{max-width:240px;margin:0 auto}
+
+  .post-cover{margin:46px auto 0;max-width:980px}
+  .post-cover img{width:100%;aspect-ratio:16/8;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px}
+
+  .post-body{margin-top:56px}
+  .post-foot{margin-top:64px;text-align:center}
+
+  @media(max-width:560px){
+    .post-cover img{aspect-ratio:4/3}
+  }
+</style>
