@@ -1,5 +1,5 @@
 ---
-title: "Mama's Boy - A Singaporean horror short"
+title: "Mama's Boy - A Singapore Domestic Horror Story"
 date: 2024-10-12
 description: "A short horror story about a son, a mother, and the things we inherit. Mama's Boy explores family, fear, and the darkness that lives in domesticity."
 category: "Short Fiction"

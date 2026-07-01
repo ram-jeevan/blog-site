@@ -14,25 +14,30 @@ const byDate = [...all].sort((a, b) => b.data.date.valueOf() - a.data.date.value
 const essays = byDate.filter((p) => p.data.type !== 'fiction');
 const fictions = byDate.filter((p) => p.data.type === 'fiction');
 const feature = essays[0];
-const pinnedFiction = fictions[0];
-const grid = [...essays.slice(1, 5), pinnedFiction].filter(Boolean);
-const contents = grid.slice(0, 3);
+const pinnedFiction = all.find((p) => p.id === 'mamas-boy') ?? fictions[0];
+const firstPichvai = all.find((p) => p.id === 'pichvai-and-bhakti');
+const seen = new Set();
+const grid = [...essays.slice(1, 5), firstPichvai, pinnedFiction]
+  .filter(Boolean)
+  .filter((p) => (seen.has(p.id) ? false : seen.add(p.id)));
+// top coverlines: two essays + the pinned fiction (Mama's Boy)
+const contents = [grid[0], grid[1], pinnedFiction].filter(Boolean);
 
-const metaDescription = 'Essays which celebrate and appreciate the development of ancient Indian art styles, music, poetry and architecture, and how they related to Hindu philosophy, belief and practice. Bhakti, Instruments, Ghazzals, Paintings. Occasionally explore Singaporean identity in relation to local expressions of culture.';
+const metaDescription = 'Essays on ancient Indian art — painting, music, poetry, and architecture — and how it connects to Hindu belief and practice. Bhakti, instruments, ghazals, paintings. With the occasional look at Singaporean culture and identity.';
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }).toUpperCase();
 const fmtYear = (d: Date) => d.getFullYear();
 ---
 
-<Layout title="Written Works — Ram Jeevan Vinod" description={metaDescription}>
+<Layout title="Ram Jeevan Vinod" description={metaDescription}>
 
   <!-- ============ COVER ============ -->
   <section class="cover wrap">
     <div class="cover-text">
-      <span class="kicker">Rooted in tradition, relevant today</span>
+      <span class="kicker">Celebrating tradition to appreciate today</span>
       <h1 class="masthead serif">Written<br />Works</h1>
-      <p class="tagline serif">Exploring how art in Ancient India was used as a tool for extending the self and engaging with belief and meaning.</p>
+      <p class="tagline serif">Bhakti Art History and Singaporean fiction stories.</p>
 
       <ul class="contents">
         {contents.map((c, i) => (
@@ -46,14 +51,11 @@ const fmtYear = (d: Date) => d.getFullYear();
         ))}
       </ul>
 
-      <blockquote class="cover-quote serif">
-        <span class="qmark">“</span>Be rooted in what is eternal, and flow with the changing.
-      </blockquote>
     </div>
 
     <figure class="cover-art">
-      <img src="/images/hero-mural.png" alt="Madhubani-style mural of village life, art, and learning" />
-      <figcaption class="folio">Folk mural · tradition meets the present</figcaption>
+      <img src="/images/hero_hanuman.jpg" alt="Hanuman, a 1973 painting by Thawan Dutchanee" />
+      <figcaption class="folio">Hanuman, Thawan Dutchanee, 1973</figcaption>
     </figure>
   </section>
 
@@ -115,7 +117,7 @@ const fmtYear = (d: Date) => d.getFullYear();
     <div class="cta-inner wrap">
       <span class="kicker cta-kicker">Portfolio</span>
       <h2 class="serif cta-title">Stories, Data &amp; Essays</h2>
-      <p class="cta-dek">Beyond the essays — short fiction rooted in Singapore, data &amp; machine-learning projects, and criticism. The wider body of work.</p>
+      <p class="cta-dek">More than the essays: short fiction set in Singapore, data and machine-learning projects, and criticism.</p>
       <a href="/portfolio" class="btn cta-btn">View Portfolio <span>→</span></a>
     </div>
   </section>
@@ -136,7 +138,7 @@ const fmtYear = (d: Date) => d.getFullYear();
   .cover-quote{margin-top:26px;font-style:italic;font-size:1.25rem;color:var(--ink);padding-left:6px;max-width:34ch}
   .qmark{color:var(--red);font-size:1.4em;line-height:0;margin-right:.04em;vertical-align:-.25em}
   .cover-art{position:relative}
-  .cover-art img{width:100%;aspect-ratio:4/3.4;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px}
+  .cover-art img{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px}
   .cover-art figcaption{margin-top:18px;text-align:right}
 
   .pattern-band{height:62px;background:url("/images/madhubani-pattern.png") center/auto 150px repeat-x;border-top:1px solid var(--line);border-bottom:1px solid var(--line);opacity:.9;position:relative;z-index:1}

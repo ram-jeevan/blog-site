@@ -7,9 +7,9 @@ const stories = [
   { t: 'Classroom Warfare', d: 'Chapter 1 of a Singapore school mystery.' },
 ];
 const data = [
-  { t: 'Diabetes Readmission Risk Scores', d: 'ML models predicting hospital readmissions for diabetic patients at discharge.' },
-  { t: 'Coffeeshop Sales Analysis', d: 'Analysing coffeeshop sales data to optimise profits.' },
-  { t: 'HDB Price Prediction', d: 'How six key factors shape HDB resale price.' },
+  { t: 'Diabetes Readmission Risk Scores', d: 'Machine-learning models that flag diabetic patients likely to be readmitted at discharge.', url: 'https://github.com/ram-jeevan/Predicting-Hospital-Readmissions-for-Diabetic-Patients' },
+  { t: 'Coffeeshop Sales Analysis', d: 'Analysing coffeeshop sales to find what drives profit.', url: 'https://github.com/ram-jeevan/coffeeshop-sales-analysis' },
+  { t: 'HDB Price Prediction', d: 'The six factors that shape HDB resale prices.', url: 'https://github.com/ram-jeevan/HDB-price-prediction-ml' },
 ];
 const articles = [
   { t: 'The Freedom of Exclusion', d: 'Singapore cultural identity in Eating Air (1999).' },
@@ -36,7 +36,7 @@ const articles = [
     <div class="pf-wrap">
       <span class="pf-eyebrow">Writer &amp; Data Analyst · Singapore</span>
       <h1 class="pf-serif">Storytelling with Data</h1>
-      <p>Paying attention, listening, and experiencing life are essential to a storytelling instinct. Data analytics is a natural extension of that practice — a way to expand the range of the stories I can tell.</p>
+      <p>Good storytelling starts with paying attention — listening, noticing, looking closely. Data analytics comes from the same instinct: a way to find and tell more stories.</p>
       <a href="#projects" class="pf-btn pf-btn--solid">Explore my work <span>→</span></a>
       <div class="pf-scrolldot">Projects below ↓</div>
     </div>
@@ -59,7 +59,7 @@ const articles = [
         <h3 class="pf-serif">Data Analytics</h3>
         <span class="pf-kicker">Machine learning &amp; analysis</span>
         {data.map((s) => (
-          <a class="pf-card" href="#"><h4 class="pf-serif">{s.t}</h4><p>{s.d}</p><span class="pf-go">View →</span></a>
+          <a class="pf-card" href={s.url} target="_blank" rel="noopener noreferrer"><h4 class="pf-serif">{s.t}</h4><p>{s.d}</p><span class="pf-go">View on GitHub →</span></a>
         ))}
       </div>
       <div class="pf-col pf-col--articles">
@@ -78,8 +78,8 @@ const articles = [
       <div>
         <span class="pf-eyebrow">About</span>
         <h2 class="pf-serif">About Me</h2>
-        <p>One of my hobbies is learning about the relationship between ancient Indian art — paintings, instruments, architecture — and Hindu philosophical teachings. I also write stories rooted in Singaporean culture, drawing from my own experience.</p>
-        <p>Outside of that, I am constantly learning about data and AI as I grow as an analyst.</p>
+        <p>I am constantly learning how to work better with data and AI as I grow as an analyst.</p>
+        <p>Outside of my professional career, I enjoy learning about the relationship between ancient Indian art — paintings, instruments, architecture — and belief and philosophy. I also have always enjoyed writing stories about Singapore culture and experiences.</p>
         <a href="/blog" class="pf-btn">Read the essays <span>→</span></a>
       </div>
     </div>
@@ -89,7 +89,7 @@ const articles = [
     <div class="pf-foot">
       <div>
         <a href="/" class="pf-logo pf-serif pf-foot-logo">Ram Jeevan</a>
-        <p>Writer and data analyst based in Singapore — short fiction, data projects, and essays on art and culture.</p>
+        <p>A Singapore writer and data analyst. Short fiction, data projects, and essays on art and culture.</p>
       </div>
       <div class="pf-links">
         <a href="#projects">Portfolio</a>
