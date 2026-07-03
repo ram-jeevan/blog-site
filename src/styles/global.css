@@ -70,6 +70,8 @@ a{color:inherit;text-decoration:none}
 .btn:hover{background:var(--red);color:var(--paper)}
 .btn--solid{background:var(--red);color:var(--paper)}
 .btn--solid:hover{background:var(--red-deep);border-color:var(--red-deep)}
+.btn span{transition:transform .25s ease}
+.btn:hover span{transform:translateX(5px)}
 
 /* motif divider — a thin rule with a centered diamond */
 .rule-motif{display:flex;align-items:center;gap:14px;color:var(--red)}
@@ -94,3 +96,11 @@ a{color:inherit;text-decoration:none}
 .prose code{font-family:ui-monospace,SFMono-Regular,monospace;background:var(--paper-2);padding:.1em .35em;font-size:.9em}
 .prose hr{border:none;border-top:1px solid var(--line);margin:2em 0}
 .prose > p:first-of-type::first-letter{font-family:var(--display);font-weight:800;float:left;font-size:3.4rem;line-height:.74;padding:.06em .12em 0 0;color:var(--red)}
+
+/* ---------- shared motion ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}

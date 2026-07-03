@@ -49,8 +49,8 @@ const fmt = (d: Date) =>
 <style>
   .post{padding:48px 0 96px}
   .post-head{max-width:760px;text-align:center;padding-top:8px;padding-bottom:0}
-  .back{display:inline-block;margin-bottom:26px;color:var(--ink-mute)}
-  .back:hover{color:var(--red)}
+  .back{display:inline-block;margin-bottom:26px;color:var(--ink-mute);transition:color .2s, transform .25s ease}
+  .back:hover{color:var(--red);transform:translateX(-4px)}
   .post-cat{display:block;color:var(--red);margin-bottom:14px}
   .post-title{font-weight:800;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.04;color:var(--ink);max-width:18ch;margin:0 auto}
   .post-meta{margin:22px 0 26px}
@@ -58,7 +58,8 @@ const fmt = (d: Date) =>
   .post-head .rule-motif{max-width:240px;margin:0 auto}
 
   .post-cover{margin:46px auto 0;max-width:980px}
-  .post-cover img{width:100%;aspect-ratio:16/8;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px}
+  .post-cover img{width:100%;aspect-ratio:16/8;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px;transition:filter .5s ease, outline-offset .35s ease}
+  .post-cover:hover img{filter:saturate(1.1);outline-offset:9px}
 
   .post-body{margin-top:56px}
   .post-foot{margin-top:64px;text-align:center}

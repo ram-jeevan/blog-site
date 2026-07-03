@@ -112,21 +112,27 @@ const articles = [
   .pf-eyebrow{font-family:"Karla",sans-serif;font-weight:700;letter-spacing:.28em;text-transform:uppercase;font-size:.72rem;color:#9C5A3C}
   .pf-btn{display:inline-flex;align-items:center;gap:.6em;font-family:"Karla",sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;padding:.9em 1.9em;border:1px solid #9C5A3C;color:#9C5A3C;background:transparent;cursor:pointer;transition:all .25s}
   .pf-btn:hover{background:#9C5A3C;color:#fff}
+  .pf-btn span{transition:transform .25s ease}
+  .pf-btn:hover span{transform:translateX(5px)}
   .pf-btn--solid{background:#9C5A3C;color:#fff8ef}
   .pf-btn--solid:hover{background:#864A30;border-color:#864A30}
 
   .pf-bar{position:sticky;top:0;z-index:20;background:rgba(232,220,200,.9);backdrop-filter:blur(8px);border-bottom:1px solid #C9B89B}
   .pf-bar-inner{max-width:1240px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
-  .pf-logo{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.7rem;font-weight:500;color:#3A2A1E}
+  .pf-logo{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.7rem;font-weight:500;color:#3A2A1E;transition:color .25s}
+  .pf-logo:hover{color:#9C5A3C}
   .pf-nav{display:flex;align-items:center;gap:30px}
-  .pf-nav a{font-weight:600;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:#5C4A3B;transition:color .2s}
+  .pf-nav a{position:relative;font-weight:600;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:#5C4A3B;transition:color .2s}
   .pf-nav a:hover,.pf-nav a.active{color:#9C5A3C}
+  .pf-nav a::after{content:"";position:absolute;left:0;bottom:-5px;width:100%;height:2px;background:#9C5A3C;transform:scaleX(0);transform-origin:right;transition:transform .3s ease}
+  .pf-nav a:hover::after{transform:scaleX(1);transform-origin:left}
 
   .pf-hero{position:relative;text-align:center;padding:120px 0 130px;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%, #F6DCBE 0%, #EFD3B4 28%, #E8DCC8 64%, #E4D6BE 100%)}
   .pf-hero .pf-wrap{max-width:760px}
   .pf-hero h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(2.8rem,6vw,5rem);line-height:1.02;margin:.32em 0 .5em;color:#3A2A1E}
   .pf-hero p{font-size:1.16rem;color:#5C4A3B;max-width:600px;margin:0 auto 2.2em}
-  .pf-scrolldot{margin-top:60px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#5C4A3B;opacity:.7}
+  .pf-scrolldot{margin-top:60px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#5C4A3B;opacity:.7;animation:pf-drift 2.6s ease-in-out infinite}
+  @keyframes pf-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
   .pf-proj-head{text-align:center;padding:84px 0 10px}
   .pf-proj-head .pf-eyebrow{display:block;margin-bottom:.6em}
@@ -138,18 +144,27 @@ const articles = [
   .pf-col--articles{background:linear-gradient(170deg,#C29A55 0%,#A07E3C 100%)}
   .pf-col h3{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:1.9rem;color:#fdf6ea;text-align:center;margin-bottom:8px}
   .pf-col .pf-kicker{display:block;text-align:center;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:30px}
-  .pf-card{background:rgba(255,251,244,.94);border:1px solid rgba(255,255,255,.4);padding:22px 22px 20px;margin-bottom:18px;transition:transform .25s, box-shadow .25s;display:block}
+  .pf-card{position:relative;overflow:hidden;background:rgba(255,251,244,.94);border:1px solid rgba(255,255,255,.4);padding:22px 22px 20px;margin-bottom:18px;transition:transform .25s, box-shadow .25s;display:block}
   .pf-card:hover{transform:translateY(-4px);box-shadow:0 20px 36px -22px rgba(20,12,6,.55)}
-  .pf-card h4{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:1.4rem;line-height:1.12;color:#3A2A1E;margin-bottom:.25em}
+  .pf-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:#9C5A3C;transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+  .pf-card:hover::before{transform:scaleX(1)}
+  .pf-col--stories .pf-card::before{background:#3F5F5C}
+  .pf-col--articles .pf-card::before{background:#A07E3C}
+  .pf-card h4{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:1.4rem;line-height:1.12;color:#3A2A1E;margin-bottom:.25em;transition:color .25s}
+  .pf-card:hover h4{color:#9C5A3C}
+  .pf-col--stories .pf-card:hover h4{color:#3F5F5C}
+  .pf-col--articles .pf-card:hover h4{color:#8a6a2c}
   .pf-card p{font-size:.9rem;color:#5C4A3B;margin-bottom:.7em}
-  .pf-card .pf-go{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#9C5A3C}
+  .pf-card .pf-go{display:inline-block;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#9C5A3C;transition:transform .25s ease}
+  .pf-card:hover .pf-go{transform:translateX(5px)}
   .pf-col--stories .pf-card .pf-go{color:#3F5F5C}
   .pf-col--articles .pf-card .pf-go{color:#8a6a2c}
 
   .pf-about{background:#EFE6D4;padding:104px 0}
   .pf-about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}
   .pf-portrait{aspect-ratio:4/5;border:1px solid #C9B89B;overflow:hidden;background:#E8DCC8}
-  .pf-portrait img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
+  .pf-portrait img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;transition:transform .6s ease}
+  .pf-portrait:hover img{transform:scale(1.04)}
   .pf-about h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(2rem,3.4vw,2.9rem);color:#3A2A1E;margin:.2em 0 .5em}
   .pf-about p{font-size:1.06rem;color:#5C4A3B;margin-bottom:1.2em;max-width:560px}
 
@@ -158,8 +173,8 @@ const articles = [
   .pf-foot-logo{color:#F4ECDC;font-size:2rem;margin-bottom:.5em;display:inline-block}
   .pf-foot p{color:#b8a78c;max-width:420px;font-size:.96rem}
   .pf-links{display:flex;flex-direction:column;gap:12px}
-  .pf-links a{color:#E8DCC8;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;transition:color .2s}
-  .pf-links a:hover{color:#E2A878}
+  .pf-links a{color:#E8DCC8;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;transition:color .2s, transform .25s ease;align-self:flex-start}
+  .pf-links a:hover{color:#E2A878;transform:translateX(5px)}
   .pf-foot-bar{border-top:1px solid rgba(201,184,155,.18);text-align:center;padding:22px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#8a7860}
 
   @media(max-width:920px){

@@ -126,27 +126,36 @@ const fmtYear = (d: Date) => d.getFullYear();
 
 <style>
   .cover{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:70px 32px 64px}
+  .cover-text{animation:rise .6s ease both}
   .masthead{font-weight:800;font-size:clamp(3.4rem,8vw,6.6rem);line-height:.92;letter-spacing:-.01em;margin:.18em 0 .3em;color:var(--ink)}
   .tagline{font-style:italic;font-size:1.35rem;color:var(--ink-soft);max-width:30ch;margin-bottom:1.8em}
   .contents{list-style:none;border-top:1px solid var(--line);padding-top:18px}
-  .contents li{display:flex;gap:16px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .contents li{position:relative;display:flex;gap:16px;align-items:center;padding:13px 8px 13px 0;border-bottom:1px solid var(--line-soft);transition:background .25s ease, padding-left .25s ease}
+  .contents li:hover{background:rgba(190,58,36,.05);padding-left:8px}
+  .contents li::after{content:"→";position:absolute;right:10px;top:50%;transform:translate(-8px,-50%);opacity:0;color:var(--red);font-family:var(--sans);transition:opacity .25s ease, transform .25s ease}
+  .contents li:hover::after{opacity:1;transform:translate(0,-50%)}
   .contents li a{display:block}
-  .chip{width:46px;height:46px;flex:0 0 auto;border:1px solid var(--red-deep)}
+  .chip{width:46px;height:46px;flex:0 0 auto;border:1px solid var(--red-deep);transition:transform .3s ease}
+  .contents li:hover .chip{transform:rotate(-5deg) scale(1.08)}
   .c-label{display:block;font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:.66rem;color:var(--red);margin-bottom:2px}
   .c-title{display:block;font-size:1.18rem;color:var(--ink);line-height:1.15;transition:color .2s}
-  .contents li a:hover .c-title{color:var(--red)}
+  .contents li:hover .c-title{color:var(--red)}
   .cover-quote{margin-top:26px;font-style:italic;font-size:1.25rem;color:var(--ink);padding-left:6px;max-width:34ch}
   .qmark{color:var(--red);font-size:1.4em;line-height:0;margin-right:.04em;vertical-align:-.25em}
-  .cover-art{position:relative}
-  .cover-art img{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px}
-  .cover-art figcaption{margin-top:18px;text-align:right}
+  .cover-art{position:relative;animation:rise .6s ease .15s both}
+  .cover-art img{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:6px;transition:filter .5s ease, outline-offset .35s ease}
+  .cover-art:hover img{filter:saturate(1.12) contrast(1.03);outline-offset:9px}
+  .cover-art figcaption{margin-top:18px;text-align:right;transition:color .3s}
+  .cover-art:hover figcaption{color:var(--red)}
 
   .pattern-band{height:62px;background:url("/images/madhubani-pattern.png") center/auto 150px repeat-x;border-top:1px solid var(--line);border-bottom:1px solid var(--line);opacity:.9;position:relative;z-index:1}
 
   .feature{display:grid;grid-template-columns:1.05fr .95fr;align-items:stretch;position:relative;z-index:1}
-  .feature-art{position:relative;min-height:520px;background:#2a211a}
-  .feature-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .feature-art::after{content:"";position:absolute;inset:14px;border:1px solid rgba(243,236,220,.5);pointer-events:none}
+  .feature-art{position:relative;min-height:520px;background:#2a211a;overflow:hidden}
+  .feature-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
+  .feature:hover .feature-art img{transform:scale(1.04)}
+  .feature-art::after{content:"";position:absolute;inset:14px;border:1px solid rgba(243,236,220,.5);pointer-events:none;transition:inset .45s ease}
+  .feature:hover .feature-art::after{inset:22px}
   .feature-text{padding:64px 56px;background:var(--paper-2);display:flex;flex-direction:column}
   .feature-running{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:24px}
   .feature-cat{color:var(--red)}
@@ -165,16 +174,20 @@ const fmtYear = (d: Date) => d.getFullYear();
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:52px 38px}
   .card{display:flex;flex-direction:column;transition:transform .3s ease}
   .card:hover{transform:translateY(-6px)}
-  .card-img{aspect-ratio:4/3;overflow:hidden;background:#2a211a;border:1px solid var(--ink)}
-  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-  .card:hover .card-img img{transform:scale(1.05)}
+  .card-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:#2a211a;border:1px solid var(--ink);transition:box-shadow .35s ease}
+  .card:hover .card-img{box-shadow:0 20px 32px -20px rgba(30,24,19,.5)}
+  .card-img::after{content:"";position:absolute;inset:0;background:linear-gradient(to top, rgba(190,58,36,.22), transparent 55%);opacity:0;transition:opacity .4s ease;pointer-events:none}
+  .card:hover .card-img::after{opacity:1}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease, filter .5s ease}
+  .card:hover .card-img img{transform:scale(1.05);filter:saturate(1.1)}
   .card-body{padding-top:18px}
   .card-cat{font-size:.66rem;color:var(--red)}
   .card-title{font-weight:600;font-size:1.55rem;line-height:1.1;margin:.28em 0 .2em;color:var(--ink);transition:color .25s}
   .card:hover .card-title{color:var(--red)}
   .card-sub{font-size:.96rem;color:var(--ink-soft);margin-bottom:1em}
   .card-meta{display:flex;align-items:center;gap:9px;border-top:1px solid var(--line);padding-top:12px}
-  .diamond{width:6px;height:6px;transform:rotate(45deg);background:var(--marigold);flex:0 0 auto}
+  .diamond{width:6px;height:6px;transform:rotate(45deg);background:var(--marigold);flex:0 0 auto;transition:transform .45s ease, background .3s}
+  .card:hover .diamond{transform:rotate(225deg);background:var(--red)}
   .archive-more{text-align:center;margin-top:60px}
 
   .cta{position:relative;z-index:1;background:#C24A1E url("/images/banner-warli.png") center/cover no-repeat;text-align:center}
