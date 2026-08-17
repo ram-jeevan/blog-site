@@ -114,6 +114,11 @@ const nav = [
     .foot{grid-template-columns:1fr}
   }
   @media(max-width:560px){
-    .bar-nav{gap:16px}
+    /* the logo and the five nav items no longer fit on one line at phone
+       widths, which pushed the whole page into horizontal scroll — let the
+       bar wrap onto a second, centred row instead */
+    .bar-inner{flex-wrap:wrap;justify-content:center;gap:10px}
+    .logo{font-size:1.4rem}
+    .bar-nav{gap:15px;width:100%;justify-content:center}
   }
 </style>
