@@ -1,7 +1,7 @@
 ---
 title: "Dhoori - A Singapore-India travel mystery"
 date: 2024-10-12
-description: "A Singapore-born traveller arrives in a remote Indian town — and something is wrong. Dhoori is a slow-burn travel mystery about roots, return, and the unknown."
+description: "My University Final Year Project: Dhoori is a travel mystery set in India, exploring the clash between national and cultural identity."
 category: "Short Fiction"
 readingTime: "8 min read"
 cover: "/images/dhoori/yoga-tree-pose-beach.jpg"
