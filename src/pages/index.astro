@@ -55,13 +55,12 @@ const featuredDefs = [
     desc: 'The Shrinathji temple at Nathdwara changes its paintings up to eight times a day — one for each ritual darshan.',
   },
   {
-    id: 'dhoori',
-    label: 'Dhoori',
-    type: 'Short Story',
-    image: '/images/dhoori/indian-street-crowd.jpg',
-    pos: 'center 42%',
-    alt: 'Dense crowd filling a narrow Indian street, photographed from above in black and white',
-    desc: 'A Singapore-born traveller arrives in a remote Indian town and something is wrong. A slow-burn mystery about roots and return.',
+    label: 'Diabetes Readmission',
+    type: 'Data Project',
+    href: 'https://github.com/ram-jeevan/Predicting-Hospital-Readmissions-for-Diabetic-Patients',
+    image: '/images/diabetes-readmission.jpg',
+    alt: '',
+    desc: 'Machine-learning models that flag diabetic patients likely to be readmitted at discharge.',
   },
   {
     id: 'artist-once-known',
@@ -73,26 +72,26 @@ const featuredDefs = [
   },
 ];
 const featured = featuredDefs
-  .map((f) => ({ ...f, post: all.find((p) => p.id === f.id) }))
-  .filter((f) => f.post);
+  .filter((f) => f.href || all.some((p) => p.id === f.id))
+  .map((f) => ({ ...f, href: f.href ?? `/blog/${f.id}` }));
 const featuredIds = new Set(featured.map((f) => f.id));
 
 // ---------------------------------------------------------------------------
-// The existing magazine lineup, unchanged in behaviour — the newest essay runs
-// as the Feature, the next few fill the archive grid with the latest fiction
-// pinned. Anything already shown in the featured trio above is skipped so no
-// piece appears on the homepage twice.
+// Dhoori runs as the Feature (the newest essay if it is ever removed), and the
+// newest essays fill the archive grid with Mama's Boy pinned. Anything already
+// shown in the featured trio or the Feature is skipped so no piece appears on
+// the homepage twice.
 // ---------------------------------------------------------------------------
 const allEssays = byDate.filter((p) => p.data.type !== 'fiction');
 const essays = allEssays.filter((p) => !featuredIds.has(p.id));
 const fictions = byDate.filter((p) => p.data.type === 'fiction' && !featuredIds.has(p.id));
-const feature = essays[0];
+const feature = all.find((p) => p.id === 'dhoori') ?? essays[0];
 const pinnedFiction = all.find((p) => p.id === 'mamas-boy') ?? fictions[0];
 const firstPichvai = all.find((p) => p.id === 'pichvai-and-bhakti');
 const seen = new Set();
-const grid = [...essays.slice(1, 5), firstPichvai, pinnedFiction, ...essays.slice(5)]
+const grid = [...essays.slice(0, 4), firstPichvai, pinnedFiction, ...essays.slice(4)]
   .filter(Boolean)
-  .filter((p) => !featuredIds.has(p.id))
+  .filter((p) => !featuredIds.has(p.id) && p.id !== feature.id)
   .filter((p) => (seen.has(p.id) ? false : seen.add(p.id)))
   // the grid is 3-up on desktop and 2-up on tablet, so only fill whole rows —
   // a trailing half-empty row reads as a layout bug
@@ -144,7 +143,7 @@ const fmtYear = (d: Date) => d.getFullYear();
 
     <div class="fgrid">
       {featured.map((f) => (
-        <a class="fcard" href={`/blog/${f.post.id}`}>
+        <a class="fcard" href={f.href} target={f.href.startsWith('http') ? '_blank' : undefined} rel={f.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
           <div class="fcard-art">
             <img src={f.image} alt={f.alt} loading="lazy" style={f.pos ? `object-position:${f.pos}` : undefined} />
             <div class="fcard-scrim" aria-hidden="true"></div>
@@ -180,7 +179,7 @@ const fmtYear = (d: Date) => d.getFullYear();
         <p>{feature.data.description}</p>
       </div>
       <p class="meta"><b>Ram Jeevan</b> &nbsp;·&nbsp; {fmt(feature.data.date)} {fmtYear(feature.data.date)} &nbsp;·&nbsp; {feature.data.readingTime}</p>
-      <a href={`/blog/${feature.id}`} class="btn btn--solid">Read the essay <span>→</span></a>
+      <a href={`/blog/${feature.id}`} class="btn btn--solid">{feature.data.type === 'fiction' ? 'Read the story' : 'Read the essay'} <span>→</span></a>
       {feature.data.pull && (
         <blockquote class="feature-pull serif"><span class="qmark">“</span>{feature.data.pull}</blockquote>
       )}
@@ -192,7 +191,7 @@ const fmtYear = (d: Date) => d.getFullYear();
     <div class="sec-head">
       <img src="/images/warli/write.png" alt="" class="chip chip--head" />
       <div>
-        <h2 class="serif sec-title">In This Edition</h2>
+        <h2 class="serif sec-title">Written Works</h2>
       </div>
       <div class="rule-motif" aria-hidden="true"><span class="dot"></span></div>
     </div>

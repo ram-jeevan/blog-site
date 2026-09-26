@@ -4,7 +4,7 @@ date: 2024-10-12
 description: "Three chapters of a slow-burning school mystery: secrets, rivalries, and tension that only builds in confined spaces. Begin Classroom Warfare here."
 category: "Short Fiction"
 readingTime: "6 min read"
-cover: "/images/classroom-warfare/classroom-warfare-illustration.webp"
+cover: "/images/classroom-warfare/classroom-warfare-cover.jpg"
 type: "fiction"
 ---
 
