@@ -12,14 +12,14 @@ The blog is content-collection driven — drop a Markdown file in
   section markers, folk-art hero, featured essay (drop cap + pull quote), Ajanta
   essay grid, and a portfolio CTA band. Feature / contents / grid all read from
   the blog collection.
-- `src/pages/blog/index.astro` — **The Archive**: numbered magazine index of all
-  essays with thumbnails.
+- `src/pages/blog/index.astro` and `src/pages/fiction/index.astro` — numbered
+  indexes of the essays and the fiction, both rendered by
+  `src/components/PostIndex.astro`.
 - `src/pages/blog/[slug].astro` — article engine; renders each Markdown post with
   prose styling (drop cap, motif divider, cover, byline).
-- `src/pages/about.astro` — magazine about page (shared chrome).
-- `src/pages/portfolio.astro` — portfolio homepage in its own warm-gradient style:
-  "Storytelling with Data" hero, teal / terracotta / gold project columns, about.
-  Uses `<Layout bare={true}>` so it brings its own header/footer.
+- `src/pages/portfolio.astro` — portfolio in the shared chrome: "Storytelling
+  with Data" hero, the data projects (study figures, project bento with tool
+  lists), short stories and articles, and the About section (`#about`).
 
 ## Run
 
@@ -43,7 +43,6 @@ category: On Something
 readingTime: 5 min
 cover: /images/ajanta/fresco.jpg   # optional
 pull: An optional pull quote.       # optional, shown on the landing feature
-featured: false                     # one post can be true → hero feature
 ---
 
 Body in Markdown. Use ## headings and > blockquotes; the first paragraph
@@ -54,15 +53,16 @@ gets a drop cap automatically.
 
 ```
 src/
-  layouts/Layout.astro      shared masthead + footer chrome + Google Fonts (bare prop opts out)
+  layouts/Layout.astro      shared masthead + footer chrome + Google Fonts
   styles/global.css         magazine design tokens (palette, type, .prose, helpers)
   content.config.ts         blog collection schema (Astro 7 glob loader)
   content/blog/*.md         the essays (frontmatter + Markdown body)
   pages/index.astro         blog landing (magazine)
-  pages/blog/index.astro    archive list
+  components/PostIndex.astro  shared essay / fiction index
+  pages/blog/index.astro    essay index
+  pages/fiction/index.astro fiction index
   pages/blog/[slug].astro   article engine
-  pages/about.astro         about
-  pages/portfolio.astro     portfolio (warm-gradient, self-contained styles)
+  pages/portfolio.astro     portfolio and about
 public/
   images/                   source assets (paper, murals, banner, pattern)
   images/warli/             section-marker icons cropped from warli-icons.png
@@ -74,8 +74,8 @@ public/
 - Built on **Astro 7** (Content Layer API): the collection uses the `glob()`
   loader in `src/content.config.ts`, and `[slug].astro` uses `getStaticPaths()`
   with `render(post)` and `post.id` (not the older `post.render()` / `post.slug`).
-- Fonts: Playfair Display (display), Spectral (body), Archivo (labels) for the
-  blog; Cormorant Garamond + Karla for the portfolio. All from Google Fonts.
+- Fonts: Playfair Display (display), Spectral (body), Archivo (labels), all
+  from Google Fonts.
 - Imagery: provided folk-art assets + public-domain Ajanta frescoes. Swap any
   `/images/...` path to use your own art.
 - Deploy: `npm run build` produces a static `dist/` deployable to Netlify,

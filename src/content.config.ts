@@ -15,7 +15,6 @@ const blog = defineCollection({
     cover: z.string().optional(),
     pull: z.string().optional(),
     type: z.enum(['essay', 'fiction']).optional().default('essay'),
-    featured: z.boolean().optional().default(false),
   }),
 });
 

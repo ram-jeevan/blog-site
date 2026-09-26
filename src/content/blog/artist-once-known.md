@@ -6,7 +6,6 @@ category: "On Anonymity"
 readingTime: "7 min read"
 cover: "/images/artist-once-known/ajanta-buddha-mural.jpg"
 pull: "The artist withheld the name because the work pointed beyond the self."
-featured: true
 ---
 
 Ancient Indian artistic anonymity was, in many cases, a philosophical choice: the expression of a tradition that understood art as seva, offering, and meditative practice rather than self-assertion. [The artist withheld the name because the work pointed beyond the self](/blog/art-as-offering).

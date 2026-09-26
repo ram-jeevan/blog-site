@@ -31,7 +31,8 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+/* jump links land below the sticky header, which wraps to two rows on phones */
+html{scroll-behavior:smooth;scroll-padding-top:110px}
 body{
   font-family:var(--body);
   color:var(--ink);

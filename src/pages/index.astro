@@ -90,10 +90,13 @@ const feature = essays[0];
 const pinnedFiction = all.find((p) => p.id === 'mamas-boy') ?? fictions[0];
 const firstPichvai = all.find((p) => p.id === 'pichvai-and-bhakti');
 const seen = new Set();
-const grid = [...essays.slice(1, 5), firstPichvai, pinnedFiction]
+const grid = [...essays.slice(1, 5), firstPichvai, pinnedFiction, ...essays.slice(5)]
   .filter(Boolean)
   .filter((p) => !featuredIds.has(p.id))
-  .filter((p) => (seen.has(p.id) ? false : seen.add(p.id)));
+  .filter((p) => (seen.has(p.id) ? false : seen.add(p.id)))
+  // the grid is 3-up on desktop and 2-up on tablet, so only fill whole rows —
+  // a trailing half-empty row reads as a layout bug
+  .slice(0, 6);
 
 const metaDescription = 'Essays on ancient Indian art — painting, music, poetry, and architecture — and how it connects to Hindu belief and practice. Bhakti, instruments, ghazals, paintings. With the occasional look at Singaporean culture and identity.';
 
@@ -116,7 +119,7 @@ const fmtYear = (d: Date) => d.getFullYear();
         rel={b.external ? 'noopener noreferrer' : undefined}
       >
         <div class="pblock-art">
-          <img src={b.image} alt={b.alt} style={`object-position:${b.pos}`} />
+          <img src={b.image} alt={b.alt} style={`object-position:${b.pos}`} fetchpriority="high" />
           <div class="pblock-scrim" aria-hidden="true"></div>
           <div class="pblock-overlay">
             <span class="pblock-eyebrow">{b.eyebrow}</span>
@@ -189,7 +192,6 @@ const fmtYear = (d: Date) => d.getFullYear();
     <div class="sec-head">
       <img src="/images/warli/write.png" alt="" class="chip chip--head" />
       <div>
-        <span class="kicker">Selected</span>
         <h2 class="serif sec-title">In This Edition</h2>
       </div>
       <div class="rule-motif" aria-hidden="true"><span class="dot"></span></div>
@@ -229,13 +231,16 @@ const fmtYear = (d: Date) => d.getFullYear();
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
   /* ---------------- primary entry blocks ---------------- */
-  .primary{display:grid;grid-template-columns:1fr 1fr;gap:38px;padding-top:56px;padding-bottom:78px}
+  .primary{display:grid;grid-template-columns:1fr 1fr;gap:38px;padding-top:34px;padding-bottom:78px}
   .pblock{display:flex;flex-direction:column;animation:rise .6s ease both;transition:transform .35s ease}
   .pblock:nth-child(2){animation-delay:.1s}
   .pblock:hover{transform:translateY(-6px)}
   .pblock:focus-visible{outline:2px solid var(--red);outline-offset:6px}
 
-  .pblock-art{position:relative;aspect-ratio:4/5;overflow:hidden;background:#2a211a;border:1px solid var(--ink);transition:box-shadow .4s ease}
+  /* cap against the viewport so the eyebrow and title clear the fold on a
+     laptop; object-fit handles the crop */
+  .pblock-art{position:relative;aspect-ratio:4/5;max-height:max(calc(100dvh - 232px),320px);
+    overflow:hidden;background:#2a211a;border:1px solid var(--ink);transition:box-shadow .4s ease}
   .pblock:hover .pblock-art{box-shadow:0 28px 46px -26px rgba(30,24,19,.6)}
   .pblock-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s ease, filter .6s ease}
   .pblock:hover .pblock-art img{transform:scale(1.05)}
@@ -243,10 +248,9 @@ const fmtYear = (d: Date) => d.getFullYear();
   .pblock-art::after{content:"";position:absolute;inset:16px;border:1px solid rgba(243,236,220,.45);pointer-events:none;z-index:2;transition:inset .45s ease}
   .pblock:hover .pblock-art::after{inset:24px}
 
-  .pblock-scrim{position:absolute;inset:0;z-index:1;transition:opacity .45s ease}
+  .pblock-scrim{position:absolute;inset:0;z-index:1}
   .pblock--cw .pblock-scrim{background:linear-gradient(to top,rgba(28,14,9,.92) 0%,rgba(28,14,9,.62) 34%,rgba(28,14,9,.06) 68%,transparent 100%)}
   .pblock--pf .pblock-scrim{background:linear-gradient(to top,rgba(26,18,10,.92) 0%,rgba(26,18,10,.58) 36%,rgba(26,18,10,.05) 70%,transparent 100%)}
-  .pblock:hover .pblock-scrim{opacity:1}
   /* the extra wash that arrives on hover, so the description stays readable */
   .pblock-art::before{content:"";position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .45s ease;pointer-events:none}
   .pblock--cw .pblock-art::before{background:rgba(28,14,9,.44)}
@@ -267,7 +271,7 @@ const fmtYear = (d: Date) => d.getFullYear();
 
   .pblock-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;
     margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
-  .pblock-type{font-size:.68rem;color:var(--red);letter-spacing:.16em}
+  .pblock-type{font-size:.78rem;color:var(--red);letter-spacing:.16em}
   .pblock--pf .pblock-type{color:var(--indigo)}
   .pblock-go{font-family:var(--sans);font-weight:600;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);white-space:nowrap;transition:color .25s ease, transform .25s ease}
   .pblock:hover .pblock-go{color:var(--red);transform:translateX(4px)}
@@ -299,7 +303,7 @@ const fmtYear = (d: Date) => d.getFullYear();
   .fcard:hover .fcard-desc,.fcard:focus-visible .fcard-desc{opacity:1;max-height:11em;transform:none}
 
   .fcard-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-  .fcard-type{font-size:.66rem;color:var(--red)}
+  .fcard-type{font-size:.78rem;letter-spacing:.16em;color:var(--red)}
 
   .pattern-band{height:62px;background:url("/images/madhubani-pattern.png") center/auto 150px repeat-x;border-top:1px solid var(--line);border-bottom:1px solid var(--line);opacity:.9;position:relative;z-index:1}
 
@@ -337,7 +341,7 @@ const fmtYear = (d: Date) => d.getFullYear();
   .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease, filter .5s ease}
   .card:hover .card-img img{transform:scale(1.05);filter:saturate(1.1)}
   .card-body{padding-top:18px}
-  .card-cat{font-size:.66rem;color:var(--red)}
+  .card-cat{font-size:.78rem;letter-spacing:.16em;color:var(--red)}
   .card-title{font-weight:600;font-size:1.55rem;line-height:1.1;margin:.28em 0 .2em;color:var(--ink);transition:color .25s}
   .card:hover .card-title{color:var(--red)}
   .card-sub{font-size:.96rem;color:var(--ink-soft);margin-bottom:1em}
@@ -367,7 +371,7 @@ const fmtYear = (d: Date) => d.getFullYear();
     .primary{grid-template-columns:1fr;gap:44px;padding-top:40px;padding-bottom:64px}
     /* square once stacked — wide enough to stay generous, tall enough that the
        two portrait-format hero images aren't cut through the middle */
-    .pblock-art{aspect-ratio:1/1}
+    .pblock-art{aspect-ratio:1/1;max-height:none}
     .feature{grid-template-columns:1fr}
     .feature-art{min-height:340px}
     .feature-text{padding:44px 30px}
@@ -377,7 +381,7 @@ const fmtYear = (d: Date) => d.getFullYear();
     .fgrid{grid-template-columns:1fr;gap:34px}
     .fcard-art{aspect-ratio:16/10}
     .featured{padding-bottom:62px}
-    .pblock-art{aspect-ratio:4/5}
+    .pblock-art{aspect-ratio:4/5;max-height:none}
     .grid{grid-template-columns:1fr}
     .pblock-foot{flex-wrap:wrap;gap:8px}
   }

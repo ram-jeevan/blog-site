@@ -1,192 +1,383 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-const stories = [
-  { t: 'Dhoori', d: 'A Singapore–India travel mystery.' },
-  { t: "Mama's Boy", d: 'A Singapore HDB horror short.' },
-  { t: 'Classroom Warfare', d: 'Chapter 1 of a Singapore school mystery.' },
+// The writing entries reuse each post's own cover art, so the index stays in
+// step with the essays rather than carrying a second copy of the artwork.
+const posts = await getCollection('blog');
+const coverOf = (id: string) => {
+  const cover = posts.find((p) => p.id === id)?.data.cover;
+  if (!cover) throw new Error(`portfolio: no post or cover for "${id}"`);
+  return cover;
+};
+
+// The professional work leads the page at full width; the writing follows as a
+// two-up split. The section chips are warli marks, matching the homepage and
+// the essay index. The telescope reads as looking closely, which is the
+// argument the hero makes about analysis.
+const dataGroup = {
+  chip: '/images/warli/telescope.png',
+  title: 'Data Analytics',
+  descriptor: 'Machine learning and analysis',
+};
+
+// The current study leads with its numbers; the finished projects sit in the
+// bento below it. Tool lists come from each notebook's imports.
+const study = {
+  t: 'HDB Carparks and Resale Prices',
+  d: 'An automated Python pipeline that joins carpark availability, MRT locations and 237,543 HDB resale transactions.',
+  tools: ['Python', 'pandas', 'Matplotlib', 'pyproj', 'pytest', 'data.gov.sg API', 'OneMap API'],
+};
+
+const gh = 'https://github.com/ram-jeevan';
+const projects = [
+  { t: 'Diabetes Readmission Risk Scores', d: 'Machine-learning models that flag diabetic patients likely to be readmitted at discharge.', url: `${gh}/Predicting-Hospital-Readmissions-for-Diabetic-Patients`, cell: 'lead', img: '/images/diabetes-readmission.jpg', imgClass: 'pf-cell-photo', tools: ['Python', 'Jupyter', 'pandas', 'NumPy', 'scikit-learn', 'LightGBM', 'Matplotlib', 'Seaborn'] },
+  { t: 'HDB Price Prediction', d: 'The six factors that shape HDB resale prices, modelled across a decade of transactions.', url: `${gh}/HDB-price-prediction-ml`, cell: 'hdb', img: '/images/twelve-storeys/singapore-hdb-cityscape.png', imgClass: 'pf-cell-photo', tools: ['Python', 'Jupyter', 'pandas', 'NumPy', 'scikit-learn', 'Matplotlib', 'Seaborn'] },
+  { t: 'Coffeeshop Sales Analysis', d: 'Analysing coffeeshop sales to find what actually drives profit.', url: `${gh}/coffeeshop-sales-analysis`, cell: 'coffee', img: '/images/coffeeshop-profit.png', imgClass: 'pf-cell-shot', alt: 'Bar charts of total profit by product group and by product category', tools: ['Python', 'Jupyter', 'pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Plotly'] },
 ];
-const data = [
-  { t: 'Diabetes Readmission Risk Scores', d: 'Machine-learning models that flag diabetic patients likely to be readmitted at discharge.', url: 'https://github.com/ram-jeevan/Predicting-Hospital-Readmissions-for-Diabetic-Patients' },
-  { t: 'Coffeeshop Sales Analysis', d: 'Analysing coffeeshop sales to find what drives profit.', url: 'https://github.com/ram-jeevan/coffeeshop-sales-analysis' },
-  { t: 'HDB Price Prediction', d: 'The six factors that shape HDB resale prices.', url: 'https://github.com/ram-jeevan/HDB-price-prediction-ml' },
-];
-const articles = [
-  { t: 'The Freedom of Exclusion', d: 'Singapore cultural identity in Eating Air (1999).' },
-  { t: 'The Eye of the Beholder', d: 'Depictions of Bhakti in Pichvai art.' },
-  { t: 'Unity in Diversity', d: "The Carnivalesque in Midnight's Children." },
+const scout = {
+  t: 'Creator Scout',
+  d: 'A Python tool that finds active BookTok creators with 1,000 to 25,000 followers.',
+  tools: ['Python', 'pytest', 'ScrapeCreators API'],
+};
+
+const sideGroups = [
+  {
+    chip: '/images/warli/write.png',
+    title: 'Short Stories',
+    descriptor: 'Fiction rooted in Singapore',
+    items: [
+      { t: 'Dhoori', d: 'A Singapore to India travel mystery.', id: 'dhoori' },
+      { t: "Mama's Boy", d: 'A Singapore HDB horror short.', id: 'mamas-boy' },
+      { t: 'Classroom Warfare', d: 'Chapter 1 of a Singapore school mystery.', id: 'classroom-warfare' },
+    ],
+  },
+  {
+    chip: '/images/warli/read.png',
+    title: 'Articles',
+    descriptor: 'Criticism and cultural essays',
+    items: [
+      { t: 'The Freedom of Exclusion', d: 'Singapore cultural identity in Eating Air (1999).', id: 'eating-air' },
+      { t: 'The Eye of the Beholder', d: 'Depictions of Bhakti in Pichvai art.', id: 'eye-of-the-beholder' },
+      { t: 'Unity in Diversity', d: "The Carnivalesque in Midnight's Children.", id: 'midnights-children' },
+    ],
+  },
 ];
 ---
 
-<Layout title="Ram Jeevan Vinod — Writer & Data Analyst" description="Short fiction, data projects, and essays by Ram Jeevan Vinod, a Singapore writer and data analyst." bare={true}>
+<Layout
+  title="Portfolio — Ram Jeevan Vinod"
+  description="Short fiction, data projects, and essays by Ram Jeevan Vinod, a Singapore writer and data analyst."
+>
 
-  <header class="pf-bar">
-    <div class="pf-bar-inner">
-      <a href="/" class="pf-logo">Ram Jeevan</a>
-      <nav class="pf-nav">
-        <a href="/portfolio" class="active">Portfolio</a>
-        <a href="#about" class="hide-sm">About</a>
-        <a href="/blog" class="hide-sm">Essays</a>
-        <a href="/fiction" class="hide-sm">Fiction</a>
-      </nav>
-    </div>
-  </header>
-
+  <!-- ============ HERO ============ -->
   <section class="pf-hero">
-    <div class="pf-wrap">
-      <span class="pf-eyebrow">Writer &amp; Data Analyst · Singapore</span>
-      <h1 class="pf-serif">Storytelling with Data</h1>
-      <p>Good storytelling starts with paying attention — listening, noticing, looking closely. Data analytics comes from the same instinct: a way to find and tell more stories.</p>
-      <a href="#projects" class="pf-btn pf-btn--solid">Explore my work <span>→</span></a>
-      <div class="pf-scrolldot">Projects below ↓</div>
+    <img
+      class="pf-hero-img"
+      src="/images/hero-mural.png"
+      alt="Madhubani-style mural of people reading, painting, and working at a laptop beneath a tree"
+      fetchpriority="high"
+    />
+    <div class="pf-hero-scrim" aria-hidden="true"></div>
+    <div class="pf-hero-inner wrap">
+      <div class="pf-hero-copy">
+        <span class="kicker">Writer &amp; Data Analyst · Singapore</span>
+        <h1 class="serif pf-hero-title">Storytelling with Data</h1>
+        <p class="pf-hero-dek">
+          Good storytelling starts with paying attention: listening, noticing, looking
+          closely. Data analytics comes from the same instinct.
+        </p>
+        <a href="#projects" class="btn btn--solid">Explore my work <span>→</span></a>
+      </div>
     </div>
   </section>
 
-  <section id="projects" class="pf-projects">
-    <div class="pf-proj-head">
-      <span class="pf-eyebrow">Selected Work</span>
-      <h2 class="pf-serif">Projects</h2>
+  <div class="pattern-band" role="presentation"></div>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects" class="pf-projects wrap">
+    <div class="sec-head">
+      <h2 class="serif sec-title">Projects</h2>
+      <div class="rule-motif" aria-hidden="true"><span class="dot"></span></div>
     </div>
+
+    <!-- the professional work, at full measure -->
+    <div class="pf-lead">
+      <div class="pf-group-head">
+        <img src={dataGroup.chip} alt="" class="pf-chip pf-chip--lead" />
+        <div>
+          <h3 class="serif pf-lead-title">{dataGroup.title}</h3>
+          <p class="descriptor pf-group-desc">{dataGroup.descriptor}</p>
+        </div>
+      </div>
+
+      <!-- current study: the numbers lead -->
+      <div class="pf-study">
+        <h4 class="serif pf-study-title">{study.t}</h4>
+        <p class="pf-study-desc">{study.d}</p>
+        <div class="pf-stats">
+          <div class="pf-stat">
+            <p class="serif pf-num pf-num--up">+8.3%</p>
+            <p class="pf-stat-label">Flats near an MRT station, compared within the same town and flat type, in sales since June 2018</p>
+          </div>
+          <div class="pf-stat pf-stat--2">
+            <p class="serif pf-num">&minus;3.4%</p>
+            <p class="pf-stat-label">Flats in areas where carparks run full</p>
+          </div>
+          <div class="pf-stat pf-stat--3">
+            <p class="pf-stat-note">Areas with full carparks sit further from MRT stations: a median of 865 m, against 673 m.</p>
+          </div>
+        </div>
+        <ul class="pf-tools" aria-label="Tools used">{study.tools.map((x) => <li>{x}</li>)}</ul>
+      </div>
+
+      <!-- finished projects: bento, one cell per project -->
+      <div class="pf-bento">
+        {projects.map((p) => (
+          <a class={`pf-cell pf-cell--${p.cell}`} href={p.url} target="_blank" rel="noopener noreferrer">
+            <img class={p.imgClass} src={p.img} alt={p.alt ?? ''} loading="lazy" />
+            <div class="pf-cell-body">
+              <h4 class="serif pf-cell-title">{p.t}</h4>
+              <p class="pf-cell-desc">{p.d}</p>
+              <ul class="pf-tools" aria-label="Tools used">{p.tools.map((x) => <li>{x}</li>)}</ul>
+              <span class="pf-go">View on GitHub <span class="pf-arrow">→</span></span>
+            </div>
+          </a>
+        ))}
+        <div class="pf-cell pf-cell--scout">
+          <h4 class="serif pf-cell-title">{scout.t}</h4>
+          <p class="pf-cell-desc">{scout.d}</p>
+          <ul class="pf-tools" aria-label="Tools used">{scout.tools.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- the writing, two up -->
     <div class="pf-cols">
-      <div class="pf-col pf-col--stories">
-        <h3 class="pf-serif">Short Stories</h3>
-        <span class="pf-kicker">Fiction rooted in Singapore</span>
-        {stories.map((s) => (
-          <a class="pf-card" href="#"><h4 class="pf-serif">{s.t}</h4><p>{s.d}</p><span class="pf-go">Read →</span></a>
-        ))}
-      </div>
-      <div class="pf-col pf-col--data">
-        <h3 class="pf-serif">Data Analytics</h3>
-        <span class="pf-kicker">Machine learning &amp; analysis</span>
-        {data.map((s) => (
-          <a class="pf-card" href={s.url} target="_blank" rel="noopener noreferrer"><h4 class="pf-serif">{s.t}</h4><p>{s.d}</p><span class="pf-go">View on GitHub →</span></a>
-        ))}
-      </div>
-      <div class="pf-col pf-col--articles">
-        <h3 class="pf-serif">Articles</h3>
-        <span class="pf-kicker">Criticism &amp; cultural essays</span>
-        {articles.map((s) => (
-          <a class="pf-card" href="#"><h4 class="pf-serif">{s.t}</h4><p>{s.d}</p><span class="pf-go">Read →</span></a>
-        ))}
-      </div>
+      {sideGroups.map((g) => (
+        <div class="pf-col">
+          <div class="pf-group-head">
+            <img src={g.chip} alt="" class="pf-chip" />
+            <div>
+              <h3 class="serif pf-col-title">{g.title}</h3>
+              <p class="descriptor pf-group-desc">{g.descriptor}</p>
+            </div>
+          </div>
+
+          <ul class="pf-items">
+            {g.items.map((s) => (
+              <li>
+                <a class="pf-item" href={`/blog/${s.id}`}>
+                  <span class="pf-item-art">
+                    <img src={coverOf(s.id)} alt={s.t} loading="lazy" />
+                  </span>
+                  <h4 class="serif pf-item-title">{s.t}</h4>
+                  <p class="pf-item-desc">{s.d}</p>
+                  <span class="pf-go">Read <span class="pf-arrow">→</span></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   </section>
 
+  <!-- ============ ABOUT ============ -->
   <section id="about" class="pf-about">
-    <div class="pf-wrap pf-about-grid">
-      <figure class="pf-portrait"><img src="/images/About_Image.jpg" alt="Ram Jeevan Vinod, Singapore writer and data analyst" /></figure>
-      <div>
-        <span class="pf-eyebrow">About</span>
-        <h2 class="pf-serif">About Me</h2>
-        <p>I am constantly learning how to work better with data and AI as I grow as an analyst.</p>
-        <p>Outside of my professional career, I enjoy learning about the relationship between ancient Indian art — paintings, instruments, architecture — and belief and philosophy. I also have always enjoyed writing stories about Singapore culture and experiences.</p>
-        <a href="/blog" class="pf-btn">Read the essays <span>→</span></a>
-      </div>
+    <figure class="pf-portrait">
+      <img src="/images/About_Image.jpg" alt="Ram Jeevan Vinod, Singapore writer and data analyst" loading="lazy" />
+    </figure>
+    <div class="pf-about-text">
+      <h2 class="serif pf-about-title">About Me</h2>
+      <p>I am constantly learning how to work better with data and AI as I grow as an analyst.</p>
+      <p>
+        Outside of my professional career, I enjoy learning about the relationship between
+        ancient Indian art (paintings, instruments, architecture) and belief and philosophy.
+        I also have always enjoyed writing stories about Singapore culture and experiences.
+      </p>
+      <a href="/blog" class="btn pf-about-btn">Read the essays <span>→</span></a>
     </div>
   </section>
-
-  <footer class="pf-footer">
-    <div class="pf-foot">
-      <div>
-        <a href="/" class="pf-logo pf-serif pf-foot-logo">Ram Jeevan</a>
-        <p>A Singapore writer and data analyst. Short fiction, data projects, and essays on art and culture.</p>
-      </div>
-      <div class="pf-links">
-        <a href="#projects">Portfolio</a>
-        <a href="#about">About</a>
-        <a href="/blog">Essays</a>
-        <a href="/fiction">Fiction</a>
-        <a href="#">Instagram</a>
-      </div>
-    </div>
-    <div class="pf-foot-bar">© 2026 Ram Jeevan Vinod · Singapore</div>
-  </footer>
 
 </Layout>
 
-<style is:global>
-  /* Portfolio keeps its own warm-gradient identity (self-contained) */
-  body{ background:#E8DCC8; color:#3A2A1E; font-family:"Karla",system-ui,sans-serif; }
-  .pf-serif{font-family:"Cormorant Garamond",Georgia,serif}
-  .pf-wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
-  .pf-eyebrow{font-family:"Karla",sans-serif;font-weight:700;letter-spacing:.28em;text-transform:uppercase;font-size:.72rem;color:#9C5A3C}
-  .pf-btn{display:inline-flex;align-items:center;gap:.6em;font-family:"Karla",sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;padding:.9em 1.9em;border:1px solid #9C5A3C;color:#9C5A3C;background:transparent;cursor:pointer;transition:all .25s}
-  .pf-btn:hover{background:#9C5A3C;color:#fff}
-  .pf-btn span{transition:transform .25s ease}
-  .pf-btn:hover span{transform:translateX(5px)}
-  .pf-btn--solid{background:#9C5A3C;color:#fff8ef}
-  .pf-btn--solid:hover{background:#864A30;border-color:#864A30}
+<style>
+  /* ---------------- hero ---------------- */
+  /* The mural carries a deliberate area of blank cream on its left; the crop
+     and the scrim keep the headline sitting on it at every width. */
+  .pf-hero{position:relative;display:grid;align-items:center;overflow:hidden;
+    min-height:min(76dvh,620px);border-bottom:1px solid var(--ink)}
+  .pf-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% center}
+  .pf-hero-scrim{position:absolute;inset:0;background:linear-gradient(100deg,
+    rgba(243,236,220,.985) 0%,rgba(243,236,220,.97) 54%,rgba(243,236,220,.6) 68%,rgba(243,236,220,0) 84%)}
+  .pf-hero-inner{position:relative;z-index:2;width:100%;padding-top:46px;padding-bottom:46px;
+    animation:rise .6s ease both}
+  .pf-hero-copy{max-width:600px}
+  .pf-hero-title{font-weight:700;font-size:clamp(2.6rem,5.4vw,4.2rem);line-height:1.02;
+    color:var(--ink);margin:.24em 0 .34em;max-width:11ch}
+  .pf-hero-dek{font-size:1.14rem;color:var(--ink-soft);max-width:44ch;margin-bottom:2em}
 
-  .pf-bar{position:sticky;top:0;z-index:20;background:rgba(232,220,200,.9);backdrop-filter:blur(8px);border-bottom:1px solid #C9B89B}
-  .pf-bar-inner{max-width:1240px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
-  .pf-logo{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.7rem;font-weight:500;color:#3A2A1E;transition:color .25s}
-  .pf-logo:hover{color:#9C5A3C}
-  .pf-nav{display:flex;align-items:center;gap:30px}
-  .pf-nav a{position:relative;font-weight:600;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:#5C4A3B;transition:color .2s}
-  .pf-nav a:hover,.pf-nav a.active{color:#9C5A3C}
-  .pf-nav a::after{content:"";position:absolute;left:0;bottom:-5px;width:100%;height:2px;background:#9C5A3C;transform:scaleX(0);transform-origin:right;transition:transform .3s ease}
-  .pf-nav a:hover::after{transform:scaleX(1);transform-origin:left}
+  .pattern-band{height:52px;background:url("/images/madhubani-pattern.png") center/auto 150px repeat-x;
+    border-bottom:1px solid var(--line);opacity:.9;position:relative;z-index:1}
 
-  .pf-hero{position:relative;text-align:center;padding:120px 0 130px;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%, #F6DCBE 0%, #EFD3B4 28%, #E8DCC8 64%, #E4D6BE 100%)}
-  .pf-hero .pf-wrap{max-width:760px}
-  .pf-hero h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(2.8rem,6vw,5rem);line-height:1.02;margin:.32em 0 .5em;color:#3A2A1E}
-  .pf-hero p{font-size:1.16rem;color:#5C4A3B;max-width:600px;margin:0 auto 2.2em}
-  .pf-scrolldot{margin-top:60px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#5C4A3B;opacity:.7;animation:pf-drift 2.6s ease-in-out infinite}
-  @keyframes pf-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  /* ---------------- projects ---------------- */
+  .pf-projects{padding:78px 32px 90px}
+  .sec-head{display:flex;align-items:center;gap:22px;margin-bottom:52px}
+  .sec-title{font-weight:700;font-size:clamp(1.9rem,3vw,2.7rem);line-height:1;color:var(--ink)}
+  .sec-head .rule-motif{flex:1}
 
-  .pf-proj-head{text-align:center;padding:84px 0 10px}
-  .pf-proj-head .pf-eyebrow{display:block;margin-bottom:.6em}
-  .pf-proj-head h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(2rem,3.4vw,2.8rem);color:#3A2A1E}
-  .pf-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-  .pf-col{padding:64px 40px 72px;min-height:520px}
-  .pf-col--stories{background:linear-gradient(170deg,#557C78 0%,#3F5F5C 100%)}
-  .pf-col--data{background:linear-gradient(170deg,#A4643F 0%,#834A2E 100%)}
-  .pf-col--articles{background:linear-gradient(170deg,#C29A55 0%,#A07E3C 100%)}
-  .pf-col h3{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:1.9rem;color:#fdf6ea;text-align:center;margin-bottom:8px}
-  .pf-col .pf-kicker{display:block;text-align:center;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:30px}
-  .pf-card{position:relative;overflow:hidden;background:rgba(255,251,244,.94);border:1px solid rgba(255,255,255,.4);padding:22px 22px 20px;margin-bottom:18px;transition:transform .25s, box-shadow .25s;display:block}
-  .pf-card:hover{transform:translateY(-4px);box-shadow:0 20px 36px -22px rgba(20,12,6,.55)}
-  .pf-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:#9C5A3C;transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
-  .pf-card:hover::before{transform:scaleX(1)}
-  .pf-col--stories .pf-card::before{background:#3F5F5C}
-  .pf-col--articles .pf-card::before{background:#A07E3C}
-  .pf-card h4{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:1.4rem;line-height:1.12;color:#3A2A1E;margin-bottom:.25em;transition:color .25s}
-  .pf-card:hover h4{color:#9C5A3C}
-  .pf-col--stories .pf-card:hover h4{color:#3F5F5C}
-  .pf-col--articles .pf-card:hover h4{color:#8a6a2c}
-  .pf-card p{font-size:.9rem;color:#5C4A3B;margin-bottom:.7em}
-  .pf-card .pf-go{display:inline-block;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#9C5A3C;transition:transform .25s ease}
-  .pf-card:hover .pf-go{transform:translateX(5px)}
-  .pf-col--stories .pf-card .pf-go{color:#3F5F5C}
-  .pf-col--articles .pf-card .pf-go{color:#8a6a2c}
+  .pf-group-head{display:flex;align-items:center;gap:15px;padding-bottom:16px;
+    border-bottom:1px solid var(--ink);margin-bottom:6px}
+  .pf-chip{width:46px;height:46px;flex:0 0 auto;border:1px solid var(--red-deep)}
+  .pf-group-desc{font-size:.92rem;line-height:1.35}
+  .pf-col-title{font-weight:700;font-size:1.5rem;line-height:1.1;color:var(--ink)}
 
-  .pf-about{background:#EFE6D4;padding:104px 0}
-  .pf-about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}
-  .pf-portrait{aspect-ratio:4/5;border:1px solid #C9B89B;overflow:hidden;background:#E8DCC8}
-  .pf-portrait img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;transition:transform .6s ease}
-  .pf-portrait:hover img{transform:scale(1.04)}
-  .pf-about h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(2rem,3.4vw,2.9rem);color:#3A2A1E;margin:.2em 0 .5em}
-  .pf-about p{font-size:1.06rem;color:#5C4A3B;margin-bottom:1.2em;max-width:560px}
+  /* --- the lead group runs the full measure --- */
+  .pf-lead{margin-bottom:82px}
+  .pf-chip--lead{width:58px;height:58px}
+  .pf-lead-title{font-weight:700;font-size:clamp(1.7rem,2.6vw,2.15rem);line-height:1.05;color:var(--ink)}
 
-  .pf-footer{background:#241B14;color:#E8DCC8}
-  .pf-foot{max-width:1240px;margin:0 auto;padding:72px 32px 40px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start}
-  .pf-foot-logo{color:#F4ECDC;font-size:2rem;margin-bottom:.5em;display:inline-block}
-  .pf-foot p{color:#b8a78c;max-width:420px;font-size:.96rem}
-  .pf-links{display:flex;flex-direction:column;gap:12px}
-  .pf-links a{color:#E8DCC8;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;transition:color .2s, transform .25s ease;align-self:flex-start}
-  .pf-links a:hover{color:#E2A878;transform:translateX(5px)}
-  .pf-foot-bar{border-top:1px solid rgba(201,184,155,.18);text-align:center;padding:22px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#8a7860}
+  /* --- current study: numbers first --- */
+  .pf-study{padding:34px 0 48px}
+  .pf-study-title{font-weight:600;font-size:clamp(1.35rem,2vw,1.65rem);line-height:1.12;color:var(--ink);margin-bottom:.3em}
+  .pf-study-desc{font-size:1.02rem;line-height:1.55;color:var(--ink-soft);max-width:58ch}
+  .pf-stats{display:grid;grid-template-columns:5fr 4fr 3fr;gap:32px;margin:44px 0 36px}
+  .pf-stat--2{margin-top:56px}
+  .pf-stat--3{margin-top:112px;border-top:1px solid var(--line);padding-top:18px}
+  .pf-num{font-weight:700;font-size:clamp(3.6rem,7vw,5.6rem);line-height:1;color:var(--ink)}
+  .pf-num--up{color:var(--red)}
+  .pf-stat-label{margin-top:.6em;font-size:.98rem;line-height:1.45;color:var(--ink-soft);max-width:30ch}
+  .pf-stat-note{font-size:.98rem;line-height:1.5;color:var(--ink-soft)}
 
-  @media(max-width:920px){
-    .pf-cols{grid-template-columns:1fr}
-    .pf-col{min-height:0}
-    .pf-about-grid{grid-template-columns:1fr;gap:36px}
-    .pf-portrait{max-width:260px}
-    .pf-foot{grid-template-columns:1fr}
+  /* tool boxes, as on a GitHub repo page */
+  .pf-tools{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+  .pf-tools li{font-family:var(--sans);font-weight:600;font-size:.72rem;line-height:1;padding:.5em .7em;
+    border:1px solid var(--line);color:var(--ink-soft);background:rgba(243,236,220,.6)}
+
+  /* --- finished projects: bento --- */
+  .pf-bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:minmax(300px,auto) minmax(300px,auto) auto;gap:16px}
+  .pf-cell{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:28px;border:1px solid var(--ink);background:var(--paper-2)}
+  a.pf-cell:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+  .pf-cell-title{font-weight:600;font-size:1.4rem;line-height:1.12;color:var(--ink);margin-bottom:.3em;transition:color .25s}
+  .pf-cell-desc{font-size:.98rem;line-height:1.5;color:var(--ink-soft);max-width:48ch}
+  .pf-cell .pf-go{margin-top:18px}
+  a.pf-cell:hover .pf-arrow{transform:translateX(5px)}
+
+  /* project images carry their own text, so they sit above the card text, never behind it */
+  .pf-cell-shot{display:block;width:calc(100% + 56px);max-width:none;margin:-28px -28px 24px;border-bottom:1px solid var(--ink)}
+  .pf-cell--coffee{justify-content:space-between}
+
+  /* readmission: the large cell */
+  .pf-cell--lead{grid-column:span 4;grid-row:span 2}
+  .pf-cell--lead .pf-cell-title{font-size:clamp(1.7rem,2.6vw,2.15rem)}
+
+  /* readmission and HDB prices: a photo fading into an ink scrim */
+  .pf-cell--hdb{grid-column:span 2}
+  .pf-cell--lead,.pf-cell--hdb{background:var(--ink)}
+  .pf-cell-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s ease}
+  .pf-cell--lead::before,.pf-cell--hdb::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(30,24,19,.95) 45%,rgba(30,24,19,.35))}
+  /* twice the height of the HDB cell, so its fade starts lower to show as much of the photo */
+  .pf-cell--lead::before{background:linear-gradient(to top,rgba(30,24,19,.95) 28%,rgba(30,24,19,.2) 70%)}
+  a.pf-cell--lead:hover .pf-cell-photo,a.pf-cell--hdb:hover .pf-cell-photo{transform:scale(1.05)}
+
+  /* the two dark cells carry paper text */
+  .pf-cell--lead .pf-cell-title,.pf-cell--hdb .pf-cell-title{color:var(--paper)}
+  .pf-cell--lead .pf-cell-desc,.pf-cell--hdb .pf-cell-desc{color:rgba(243,236,220,.86)}
+  .pf-cell--lead .pf-tools li,.pf-cell--hdb .pf-tools li{border-color:rgba(243,236,220,.4);color:var(--paper);background:rgba(30,24,19,.25)}
+  .pf-cell--lead .pf-go,.pf-cell--hdb .pf-go{color:var(--marigold)}
+
+  /* coffeeshop: paper, led by its profit chart */
+  .pf-cell--coffee{grid-column:span 2}
+  a.pf-cell--coffee:hover .pf-cell-title{color:var(--red)}
+
+  /* creator scout: a full-width strip, no repo link */
+  .pf-cell--scout{grid-column:span 6;background:var(--paper-3);display:grid;grid-template-columns:1fr 2fr;gap:6px 32px;align-items:start}
+  .pf-cell--scout .pf-cell-title{grid-row:span 2}
+  .pf-cell--scout .pf-tools{margin-top:4px}
+
+  /* --- the writing, two columns divided by a hairline --- */
+  .pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .pf-col{padding:0 44px}
+  .pf-col:first-child{padding-left:0}
+  .pf-col:last-child{padding-right:0}
+  .pf-col + .pf-col{border-left:1px solid var(--line)}
+
+  .pf-items{list-style:none;padding-top:26px}
+  .pf-items li + li{margin-top:34px}
+  .pf-item{display:block;position:relative}
+  .pf-item:focus-visible{outline:2px solid var(--red);outline-offset:6px}
+  /* each piece leads with its own cover art, pulled from the essay itself */
+  .pf-item-art{display:block;position:relative;aspect-ratio:2/1;overflow:hidden;
+    background:#2a211a;border:1px solid var(--ink);margin-bottom:16px;
+    transition:box-shadow .35s ease}
+  .pf-item:hover .pf-item-art{box-shadow:0 20px 32px -20px rgba(30,24,19,.5)}
+  .pf-item-art img{width:100%;height:100%;object-fit:cover;
+    transition:transform .6s ease, filter .5s ease}
+  .pf-item:hover .pf-item-art img{transform:scale(1.05);filter:saturate(1.1)}
+  .pf-item-art::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to top,rgba(190,58,36,.22),transparent 55%);
+    opacity:0;transition:opacity .4s ease}
+  .pf-item:hover .pf-item-art::after{opacity:1}
+  .pf-item-title{font-weight:600;font-size:1.34rem;line-height:1.14;color:var(--ink);
+    margin-bottom:.22em;transition:color .25s}
+  .pf-item:hover .pf-item-title{color:var(--red)}
+  .pf-item-desc{font-size:.94rem;line-height:1.5;color:var(--ink-soft);margin-bottom:.7em}
+  .pf-go{font-family:var(--sans);font-weight:700;font-size:.67rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--red);display:inline-flex;gap:.5em;align-items:center}
+  .pf-arrow{transition:transform .25s ease}
+  .pf-item:hover .pf-arrow{transform:translateX(5px)}
+
+  /* ---------------- about ---------------- */
+  .pf-about{display:grid;grid-template-columns:.72fr 1.28fr;align-items:stretch;
+    background:var(--paper-2);border-top:1px solid var(--line);position:relative;z-index:1}
+  .pf-portrait{position:relative;min-height:440px;background:#2a211a;overflow:hidden}
+  .pf-portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    object-position:center 18%;transition:transform .7s ease}
+  .pf-about:hover .pf-portrait img{transform:scale(1.04)}
+  .pf-portrait::after{content:"";position:absolute;inset:14px;border:1px solid rgba(243,236,220,.5);
+    pointer-events:none;transition:inset .45s ease}
+  .pf-about:hover .pf-portrait::after{inset:22px}
+  .pf-about-text{padding:76px 56px;display:flex;flex-direction:column;justify-content:center}
+  .pf-about-title{font-weight:700;font-size:clamp(1.9rem,3vw,2.7rem);line-height:1.05;
+    color:var(--ink);margin-bottom:.5em}
+  .pf-about-text p{font-size:1.06rem;color:var(--ink-soft);max-width:56ch;margin-bottom:1.1em}
+  .pf-about-btn{align-self:flex-start;margin-top:.8em}
+
+  /* ---------------- responsive (widest first, so the narrower blocks win) --- */
+  @media(max-width:1000px){
+    .pf-col{padding:0 26px}
+    .pf-about{grid-template-columns:1fr}
+    .pf-portrait{min-height:0;aspect-ratio:3/2}
+    .pf-about-text{padding:48px 32px 56px}
   }
-  @media(max-width:600px){
-    .pf-nav{gap:16px}
-    .pf-nav a.hide-sm{display:none}
-    .pf-hero{padding:80px 0 90px}
+  @media(max-width:860px){
+    /* numbers and bento both fall to a single column */
+    .pf-stats{grid-template-columns:1fr;gap:28px}
+    .pf-stat--2,.pf-stat--3{margin-top:0}
+    .pf-bento{grid-template-columns:1fr;grid-template-rows:none}
+    .pf-cell--lead,.pf-cell--hdb,.pf-cell--coffee,.pf-cell--scout{grid-column:auto;grid-row:auto}
+    .pf-cell--lead{min-height:440px}
+    .pf-cell--hdb{min-height:360px}
+    .pf-cell--scout{grid-template-columns:1fr}
+    .pf-cell--scout .pf-cell-title{grid-row:auto}
+    .pf-cols{grid-template-columns:1fr;gap:0}
+    .pf-col{padding:0}
+    .pf-col + .pf-col{border-left:none;border-top:1px solid var(--line);margin-top:44px;padding-top:44px}
+    .pf-lead{margin-bottom:56px}
+  }
+  @media(max-width:760px){
+    /* stand the text on solid paper at the foot of the mural rather than
+       over whichever part of the painting the crop happens to land on */
+    .pf-hero{min-height:min(84dvh,600px);align-items:end}
+    .pf-hero-img{object-position:center 30%}
+    .pf-hero-scrim{background:linear-gradient(to top,
+      rgba(243,236,220,.98) 0%,rgba(243,236,220,.96) 44%,rgba(243,236,220,.5) 78%,rgba(243,236,220,.15) 100%)}
+    .pf-hero-inner{padding-bottom:40px}
+    .pf-hero-title{max-width:none}
+    .pf-hero-copy{max-width:none}
+    .pf-projects{padding:56px 32px 70px}
+    .sec-head{margin-bottom:38px}
   }
 </style>
