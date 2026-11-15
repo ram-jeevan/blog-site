@@ -37,8 +37,10 @@ const projects = [
 ];
 const scout = {
   t: 'Creator Scout',
-  d: 'A Python tool that finds active BookTok creators with 1,000 to 25,000 followers.',
-  tools: ['Python', 'pytest', 'ScrapeCreators API'],
+  d: 'A tool that finds small, active creators in any niche. You set the niche, the follower range and the country; it keeps a list and shows who is new and who is growing.',
+  tools: ['Python', 'React', 'Astryx', 'pytest', 'ScrapeCreators API'],
+  img: '/images/creator-scout.png',
+  alt: 'Creator Scout listing tracked creators with follower counts, engagement rates and contact status, using sample accounts',
 };
 
 const sideGroups = [
@@ -145,9 +147,12 @@ const sideGroups = [
           </a>
         ))}
         <div class="pf-cell pf-cell--scout">
-          <h4 class="serif pf-cell-title">{scout.t}</h4>
-          <p class="pf-cell-desc">{scout.d}</p>
-          <ul class="pf-tools" aria-label="Tools used">{scout.tools.map((x) => <li>{x}</li>)}</ul>
+          <div>
+            <h4 class="serif pf-cell-title">{scout.t}</h4>
+            <p class="pf-cell-desc">{scout.d}</p>
+            <ul class="pf-tools" aria-label="Tools used">{scout.tools.map((x) => <li>{x}</li>)}</ul>
+          </div>
+          <img class="pf-scout-shot" src={scout.img} alt={scout.alt} loading="lazy" />
         </div>
       </div>
     </div>
@@ -292,10 +297,9 @@ const sideGroups = [
   .pf-cell--coffee{grid-column:span 2}
   a.pf-cell--coffee:hover .pf-cell-title{color:var(--red)}
 
-  /* creator scout: a full-width strip, no repo link */
-  .pf-cell--scout{grid-column:span 6;background:var(--paper-3);display:grid;grid-template-columns:1fr 2fr;gap:6px 32px;align-items:start}
-  .pf-cell--scout .pf-cell-title{grid-row:span 2}
-  .pf-cell--scout .pf-tools{margin-top:4px}
+  /* creator scout: a full-width strip, text beside its screenshot, no repo link */
+  .pf-cell--scout{grid-column:span 6;background:var(--paper-3);display:grid;grid-template-columns:2fr 3fr;gap:32px;align-items:center}
+  .pf-scout-shot{display:block;width:100%;border:1px solid var(--ink)}
 
   /* --- the writing, two columns divided by a hairline --- */
   .pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
@@ -361,7 +365,6 @@ const sideGroups = [
     .pf-cell--lead{min-height:440px}
     .pf-cell--hdb{min-height:360px}
     .pf-cell--scout{grid-template-columns:1fr}
-    .pf-cell--scout .pf-cell-title{grid-row:auto}
     .pf-cols{grid-template-columns:1fr;gap:0}
     .pf-col{padding:0}
     .pf-col + .pf-col{border-left:none;border-top:1px solid var(--line);margin-top:44px;padding-top:44px}
