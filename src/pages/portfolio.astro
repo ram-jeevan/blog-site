@@ -21,8 +21,9 @@ const dataGroup = {
   descriptor: 'Machine learning and analysis',
 };
 
-// The current study leads with its numbers; the finished projects sit in the
-// bento below it. Tool lists come from each notebook's imports.
+// Every project is a card in one bento. The carpark study has no public repo
+// or chart yet, so its headline numbers stand where the others put an image.
+// Tool lists come from each notebook's imports.
 const study = {
   t: 'HDB Carparks and Resale Prices',
   d: 'An automated Python pipeline that joins carpark availability, MRT locations and 237,543 HDB resale transactions.',
@@ -124,26 +125,6 @@ const sideGroups = [
         </div>
       </div>
 
-      <!-- current study: the numbers lead -->
-      <div class="pf-study">
-        <h4 class="serif pf-study-title">{study.t}</h4>
-        <p class="pf-study-desc">{study.d}</p>
-        <div class="pf-stats">
-          <div class="pf-stat">
-            <p class="serif pf-num pf-num--up">+8.3%</p>
-            <p class="pf-stat-label">Flats near an MRT station, compared within the same town and flat type, in sales since June 2018</p>
-          </div>
-          <div class="pf-stat pf-stat--2">
-            <p class="serif pf-num">&minus;3.4%</p>
-            <p class="pf-stat-label">Flats in areas where carparks run full</p>
-          </div>
-          <div class="pf-stat pf-stat--3">
-            <p class="pf-stat-note">Areas with full carparks sit further from MRT stations: a median of 865 m, against 673 m.</p>
-          </div>
-        </div>
-        <ul class="pf-tools" aria-label="Tools used">{study.tools.map((x) => <li>{x}</li>)}</ul>
-      </div>
-
       <!-- finished projects: bento, one cell per project -->
       <div class="pf-bento">
         {projects.map((p) => (
@@ -175,6 +156,25 @@ const sideGroups = [
             <span class="pf-go">Open the map <span class="pf-arrow">→</span></span>
           </div>
         </a>
+        <!-- no repo to link to, so a plain card rather than a link -->
+        <div class="pf-cell pf-cell--scout pf-cell--carpark">
+          <div>
+            <h4 class="serif pf-cell-title">{study.t}</h4>
+            <p class="pf-cell-desc">{study.d}</p>
+            <ul class="pf-tools" aria-label="Tools used">{study.tools.map((x) => <li>{x}</li>)}</ul>
+          </div>
+          <div class="pf-stats">
+            <div class="pf-stat">
+              <p class="serif pf-num pf-num--up">+8.3%</p>
+              <p class="pf-stat-label">Flats near an MRT station, compared within the same town and flat type, in sales since June 2018</p>
+            </div>
+            <div class="pf-stat">
+              <p class="serif pf-num">&minus;3.4%</p>
+              <p class="pf-stat-label">Flats in areas where carparks run full</p>
+            </div>
+            <p class="pf-stat-note">Areas with full carparks sit further from MRT stations: a median of 865 m, against 673 m.</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -264,17 +264,6 @@ const sideGroups = [
   .pf-chip--lead{width:58px;height:58px}
   .pf-lead-title{font-weight:700;font-size:clamp(1.7rem,2.6vw,2.15rem);line-height:1.05;color:var(--ink)}
 
-  /* --- current study: numbers first --- */
-  .pf-study{padding:34px 0 48px}
-  .pf-study-title{font-weight:600;font-size:clamp(1.35rem,2vw,1.65rem);line-height:1.12;color:var(--ink);margin-bottom:.3em}
-  .pf-study-desc{font-size:1.02rem;line-height:1.55;color:var(--ink-soft);max-width:58ch}
-  .pf-stats{display:grid;grid-template-columns:5fr 4fr 3fr;gap:32px;margin:44px 0 36px}
-  .pf-stat--2{margin-top:56px}
-  .pf-stat--3{margin-top:112px;border-top:1px solid var(--line);padding-top:18px}
-  .pf-num{font-weight:700;font-size:clamp(3.6rem,7vw,5.6rem);line-height:1;color:var(--ink)}
-  .pf-num--up{color:var(--red)}
-  .pf-stat-label{margin-top:.6em;font-size:.98rem;line-height:1.45;color:var(--ink-soft);max-width:30ch}
-  .pf-stat-note{font-size:.98rem;line-height:1.5;color:var(--ink-soft)}
 
   /* tool boxes, as on a GitHub repo page */
   .pf-tools{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
@@ -282,7 +271,7 @@ const sideGroups = [
     border:1px solid var(--line);color:var(--ink-soft);background:rgba(243,236,220,.6)}
 
   /* --- finished projects: bento --- */
-  .pf-bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:minmax(300px,auto) minmax(300px,auto) auto;gap:16px}
+  .pf-bento{margin-top:28px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:minmax(300px,auto) minmax(300px,auto) auto;gap:16px}
   .pf-cell{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;
     padding:28px;border:1px solid var(--ink);background:var(--paper-2)}
   a.pf-cell:focus-visible{outline:2px solid var(--red);outline-offset:3px}
@@ -323,6 +312,14 @@ const sideGroups = [
   .pf-scout-shot{display:block;width:100%;border:1px solid var(--ink)}
   /* worship map: the same strip mirrored, screenshot first */
   .pf-cell--map{background:var(--paper-2);grid-template-columns:3fr 2fr}
+  /* carpark study: the same strip, its numbers standing in for a screenshot */
+  .pf-stats{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px;padding:24px;
+    border:1px solid var(--ink);background:var(--paper)}
+  .pf-num{font-weight:700;font-size:clamp(2.6rem,4.4vw,3.6rem);line-height:1;color:var(--ink)}
+  .pf-num--up{color:var(--red)}
+  .pf-stat-label{margin-top:.5em;font-size:.92rem;line-height:1.45;color:var(--ink-soft)}
+  .pf-stat-note{grid-column:1 / -1;border-top:1px solid var(--line);padding-top:16px;
+    font-size:.92rem;line-height:1.5;color:var(--ink-soft)}
 
   /* --- the writing, two columns divided by a hairline --- */
   .pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
@@ -381,8 +378,7 @@ const sideGroups = [
   }
   @media(max-width:860px){
     /* numbers and bento both fall to a single column */
-    .pf-stats{grid-template-columns:1fr;gap:28px}
-    .pf-stat--2,.pf-stat--3{margin-top:0}
+    .pf-stats{grid-template-columns:1fr}
     .pf-bento{grid-template-columns:1fr;grid-template-rows:none}
     .pf-cell--lead,.pf-cell--hdb,.pf-cell--coffee,.pf-cell--scout{grid-column:auto;grid-row:auto}
     .pf-cell--lead{min-height:440px}
