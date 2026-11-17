@@ -43,6 +43,16 @@ const scout = {
   img: '/images/creator-scout.png',
   alt: 'Creator Scout listing tracked creators with follower counts, engagement rates and contact status, using sample accounts',
 };
+// Lives on this site at /worship-map/ (src/data/worship-map.html, written by
+// build_map.py in the Worship_Map project), so the card opens the map itself.
+const worship = {
+  t: 'Singapore Worship Map',
+  d: 'An interactive map of more than 500 places of worship, set against the 2020 census. Areas with more places of worship per resident have more residents with no religion.',
+  tools: ['Python', 'GeoPandas', 'D3.js', 'data.gov.sg API', 'OpenStreetMap'],
+  url: '/worship-map/',
+  img: '/images/worship-map.jpg',
+  alt: 'Map of Singapore with planning areas shaded by places of worship per resident and a dot for each site, coloured by religion',
+};
 
 const sideGroups = [
   {
@@ -155,6 +165,15 @@ const sideGroups = [
             <span class="pf-go">View on GitHub <span class="pf-arrow">→</span></span>
           </div>
           <img class="pf-scout-shot" src={scout.img} alt={scout.alt} loading="lazy" />
+        </a>
+        <a class="pf-cell pf-cell--scout pf-cell--map" href={worship.url}>
+          <img class="pf-scout-shot" src={worship.img} alt={worship.alt} loading="lazy" />
+          <div>
+            <h4 class="serif pf-cell-title">{worship.t}</h4>
+            <p class="pf-cell-desc">{worship.d}</p>
+            <ul class="pf-tools" aria-label="Tools used">{worship.tools.map((x) => <li>{x}</li>)}</ul>
+            <span class="pf-go">Open the map <span class="pf-arrow">→</span></span>
+          </div>
         </a>
       </div>
     </div>
@@ -302,6 +321,8 @@ const sideGroups = [
   /* creator scout: a full-width strip, text beside its screenshot */
   .pf-cell--scout{grid-column:span 6;background:var(--paper-3);display:grid;grid-template-columns:2fr 3fr;gap:32px;align-items:center}
   .pf-scout-shot{display:block;width:100%;border:1px solid var(--ink)}
+  /* worship map: the same strip mirrored, screenshot first */
+  .pf-cell--map{background:var(--paper-2);grid-template-columns:3fr 2fr}
 
   /* --- the writing, two columns divided by a hairline --- */
   .pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
